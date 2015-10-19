@@ -3,7 +3,7 @@ a playground for experimentation
 
 ## our goals:
 - keep a log of the steps, questions, decisions.
-
+- test stuff
 
 ## process log
 
