@@ -1,7 +1,7 @@
 # project-sandbox
-* Project Sandbox will explore mapping the uses of publicly-owned vacant properties owned by the City of Los Angeles.
+* Project Sandbox's goal is to map and explore the uses of publicly-owned vacant properties owned by the City of Los Angeles.
 * Project Sandbox is an example of using [GitHub](http://github.com) as an open tool to share code and data with the public, manage tasks and deploy civic projects.
-* MaptimeLA and the city will hold a series of workshops to teach and bring the project together.
+* MaptimeLA and the city will hold a series of workshops to teach the public how to use government data to create maps and answer questions.
 * The outcomes and lessons learned from this unusual collaboration will be shared for others to build off from.
 
 ## our goals:
