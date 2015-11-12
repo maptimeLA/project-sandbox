@@ -17,11 +17,17 @@ The outcomes and lessons learned from this unusual collaboration will be shared 
 - **Workshops**: Hold a series of workshops with Maptime
 - **Retrospective Lessons**: share our lessons with likeminded people
 
-## process log
+## do you want to contribute?
 
-- Monday, September 28
-- Tuesday, October 6
-- Friday, October 16
+See something you want to edit? Want to add a file -- a link to a dataset, a dataset itself, an image of a map, an HTML map file, or more text files? Here's how to do it:
+
+1. Make sure you have a GitHub account.
+2. Log in to GitHub.
+3. To edit a file, go to the file's page and click the Edit or  To edit the README.md, for example, you'd go to this link in your browser: `https://github.com/maptimeLA/project-sandbox/blob/master/README.md` and click the `Edit` button. It should lead you to: `https://github.com/maptimeLA/project-sandbox/edit/master/README.md`
+4. Make your edits in the file. 
+5. Write a Commit message: Tell us what you changed and why.
+6. Click the second option that reads: `Create a new branch for this commit and start a pull request.`
+7. Click the `Propose file change` button.
 
 ## important terms and definitions:
 
