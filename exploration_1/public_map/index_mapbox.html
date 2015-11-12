@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Map of Los Angeles City Council Districts</title>
+	<meta charset="utf-8" />
+	<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.css' rel='stylesheet' />
+	<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+
+</head>
+<body>
+	<div id="map"></div>
+	<script>
+        L.mapbox.accessToken = 'pk.eyJ1IjoibWFwdGltZWxhb21hciIsImEiOiJjaWd3MWVxYzYwcnpzdmttNXF0YnMyNGNpIn0.j-U_d3YrKY3uXqmVXN2RWA';   //Replace this token with the one to your mapbox account
+        var map = L.mapbox.map('map', 'mapbox.light','backtile')
+        .setView([34.052234,-118.243685], 11);
+        
+        //Code to add Basemaps
+        var baselayers = {
+        Toner: L.mapbox.tileLayer('mapbox.light'),
+        Streets: L.mapbox.tileLayer('examples.map-i87786ca'), 
+        Satellite: L.mapbox.tileLayer('examples.map-igb471ik')
+        };
+        
+        L.control.layers(baselayers).addTo(map);
+        
+        //Create locations for geojson
+        var lacity="data/lacity_boundary.geojson";
+        var lacitycd="data/lacity_council.geojson";
+        var lacityparcels="data/lacity_parcels.geojson";
+        
+        //Style LA City Boundaries
+        var featureLayer = L.mapbox.featureLayer(lacity,{
+            style:{
+                fillColor:"aqua",
+                color: "#000",
+                weight: 0,
+                opacity: 0,
+                fillOpacity: 0.2
+                }
+        }).addTo(map);
+        
+        //Style Council Distrits
+        var featureLayer = L.mapbox.featureLayer(lacitycd,{
+            style:{
+                fillColor:"#ff78b4",    
+                color: "#FFF",
+                weight: 1,
+                fillOpacity: 0.8
+                },
+        }).addTo(map);
+        
+        //Style LA City Parcels
+        var featureLayer = L.mapbox.featureLayer(lacityparcels,{
+            style:{
+                fillColor:"green",    
+                color: "#FFF",
+                weight: 1,
+                fillOpacity: 0.8
+                },
+        }).addTo(map);
+        
+        //Adds popup
+          featureLayer.on('ready',function(){
+            featureLayer.eachLayer(function(layer){
+            layer.bindPopup("<h2>"+layer.feature.properties.Dist_Name+"</h2>");
+            });
+        });
+        
+        //This pulls data from the data portal API, this link brings in about 200 businesses, you can filter more on the data portal and get it's API to load on this map
+       var businesslocations = $.getJSON('https://data.lacity.org/resource/7hny-ves3.json', function(data) {
+       $.each(data, function(index, value) {
+        if (value.location_1!=null){
+        L.circle([value.location_1.latitude,value.location_1.longitude],50,
+            {
+            color: '#5a8bc8',
+            weight:0.0,
+            fillColor: '#5a8bc8',
+            fillOpacity: 1,
+            }
+       ).addTo(map).bindPopup(value.business_name);
+ }});
+});
+        
+    	</script>
+</body>
+</html>
