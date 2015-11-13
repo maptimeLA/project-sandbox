@@ -59,10 +59,16 @@
         }).addTo(map);
       });
 
+      var councilParcelLayers = {};
+
       //Styles and loads LA City Parcels
       var activeLayer = false; // Did we link to particular layer?
       $.getJSON(lacityparcels, function(data) {
-        var councilParcelLayers = {};
+
+        $.each(districtNames, function(district, districtName) {
+          councilParcelLayers[districtName] = L.featureGroup([]);
+          console.log('district layer added', district);
+        });
 
         var parcelLayer = L.geoJson(data, {
           style:{
@@ -77,16 +83,11 @@
             //Group the parcels into district Layers
             var district = feature.properties.District;
             var districtName = (districtNames[district] || "Unknown");
-            if (councilParcelLayers[districtName] == undefined ) {
-              var layerGroup  = L.featureGroup([]).addLayer(layer);
-              councilParcelLayers[districtName] = layerGroup;
-              if(location.hash.length > 1 && location.hash.slice(1) == districtName) {
-                activeLayer = layerGroup;
-              }
-            } else {
-              councilParcelLayers[districtName].addLayer(layer);
+            var featureGroup = councilParcelLayers[districtName]
+            featureGroup.addLayer(layer);
+            if(location.hash.length > 1 && location.hash.slice(1) == districtName) {
+              activeLayer = featureGroup;
             }
-
           }
         })
 
