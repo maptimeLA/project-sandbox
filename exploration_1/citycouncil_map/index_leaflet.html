@@ -60,6 +60,7 @@
       });
 
       //Styles and loads LA City Parcels
+      var activeLayer = false; // Did we link to particular layer?
       $.getJSON(lacityparcels, function(data) {
         var councilParcelLayers = {};
 
@@ -79,17 +80,37 @@
             if (councilParcelLayers[districtName] == undefined ) {
               var layerGroup  = L.featureGroup([]).addLayer(layer);
               councilParcelLayers[districtName] = layerGroup;
+              if(location.hash.length > 1 && location.hash.slice(1) == districtName) {
+                activeLayer = layerGroup;
+              }
             } else {
               councilParcelLayers[districtName].addLayer(layer);
             }
 
           }
-        }).addTo(map);
+        })
+
+        //Use the default layer (all parcels) if we didn't link to a specific one
+        if(activeLayer) {
+          activeLayer.addTo(map);
+          map.fitBounds(activeLayer.getBounds());
+        } else {
+          parcelLayer.addTo(map);
+        }
+
         councilParcelLayers["All"] = parcelLayer;
         L.control.layers(councilParcelLayers).addTo(map);
 
         map.on('baselayerchange', function(event) {
           map.fitBounds(event.layer.getBounds());
+          var layerName = event.name;
+
+          if(history.pushState) {
+            history.pushState(null, null, '#'+layerName);
+          }
+          else {
+            location.hash = '#'+layerName;
+          }
         });
       });
   </script>
