@@ -41,7 +41,7 @@
     });
 
     //We'll build up from the districts GeoJSON
-    var districtNames = { null: "None" }
+    var districtNames = { null: "No Council District" }
 
     //Styles and loads the Council Districts
     $.getJSON(lacitycd, function(data) {
@@ -62,6 +62,8 @@
 
     //Styles and loads LA City Parcels
     $.getJSON(lacityparcels, function(data) {
+      var councilParcelLayers = {};
+
       var parcelLayer = L.geoJson(data, {
         style:{
           fillColor:"green",
@@ -73,8 +75,17 @@
           var district = feature.properties.District;
           var districtName = (districtNames[district] || "Unknown");
           layer.bindPopup("Council District: " + districtName);
+
+          if (councilParcelLayers[districtName] == undefined ) {
+            var layerGroup  = L.layerGroup([]).addLayer(layer);
+            councilParcelLayers[districtName] = layerGroup;
+          } else {
+            councilParcelLayers[districtName].addLayer(layer);
+          }
         }
       }).addTo(map);
+      councilParcelLayers["All"] = parcelLayer;
+      L.control.layers(councilParcelLayers).addTo(map);
     });
 	</script>
 </body>
