@@ -17,16 +17,25 @@
 	<script>
          var map = L.map('map')
         .setView([34.052234,-118.243685], 11);
-        
+
+        // Create overlay collections based on "GeneralUse" in lacityparcels
+        var OtherGroup = L.layerGroup(); // null
+        var CommercialGroup = L.layerGroup();
+        var DryFarmGroup = L.layerGroup();
+        var IndustrialGroup = L.layerGroup();
+        var InstitutionalGroup = L.layerGroup();
+        var MiscellaneousGroup = L.layerGroup();
+        var RecreationalGroup = L.layerGroup();
+        var ResidentialGroup = L.layerGroup();
 
         //Code to add Basemaps
         var stamentiles = L.tileLayer('http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png').addTo(map);
-   
+
         //Create locations for geojson
         var lacity="data/lacity_boundary.geojson";
         var lacitycd="data/lacity_council.geojson";
         var lacityparcels="data/lacity_parcels.geojson";
-        
+
         //Styles and loads the LA City Boundary
         $.getJSON(lacity, function(data) {
         var hubsLayer = L.geoJson(data, {
@@ -39,12 +48,12 @@
                 }
         }).addTo(map);
         });
-        
+
         //Styles and loads the Business Improvement Districts
         $.getJSON(lacitycd, function(data) {
         var routesLayer = L.geoJson(data, {
                 style:{
-                fillColor:"#ff78b4",    
+                fillColor:"#ff78b4",
                 color: "#FFF",
                 weight: 1,
                 fillOpacity: 0.8
@@ -54,19 +63,60 @@
         }
         }).addTo(map);
         });
-        
+
         //Styles and loads LA City Parcels
         $.getJSON(lacityparcels, function(data) {
-        var routesLayer = L.geoJson(data, {
-                style:{
-                fillColor:"green",    
-                color: "#FFF",
-                weight: 1,
-                fillOpacity: 0.8
-                },
-        }).addTo(map);
+            var len = data.features.length;
+            var parcel, parcel_item;
+            var parcel_category;
+
+            for (var i = 0; i < len; i++) {
+                parcel_item = data.features[i];
+                parcel_category = parcel_item.properties["GeneralUse"];
+                parcel = L.geoJson(parcel_item);
+
+                switch (parcel_category) {
+                case "Commercial":
+                    CommercialGroup.addLayer(parcel);
+                    break;
+                case "Dry Farm":
+                    DryFarmGroup.addLayer(parcel);
+                    break;
+                case "Industrial":
+                    IndustrialGroup.addLayer(parcel);
+                    break;
+                case "Institutional":
+                    InstitutionalGroup.addLayer(parcel);
+                    break;
+                case "Miscellaneous":
+                    MiscellaneousGroup.addLayer(parcel);
+                    break;
+                case "Recreational":
+                    RecreationalGroup.addLayer(parcel);
+                    break;
+                case "Residential":
+                    ResidentialGroup.addLayer(parcel);
+                    break;
+                  default:
+                    OtherGroup.addLayer(parcel);
+                }
+            }
+
+            // add to overlay
+            var overlayMaps = {
+                "Commercial": CommercialGroup,
+                "Dry Farm": DryFarmGroup,
+                "Industrial": IndustrialGroup,
+                "Institutional": InstitutionalGroup,
+                "Miscellaneous": MiscellaneousGroup,
+                "Recreational": RecreationalGroup,
+                "Residential": ResidentialGroup,
+                "Other": OtherGroup
+            };
+
+            L.control.layers(null, overlayMaps).addTo(map);
         });
-        
+
         //This pulls data from the data portal API, this link brings in about 200 businesses, you can filter more on the data portal and get it's API to load on this map
        var businesslocations = $.getJSON('https://data.lacity.org/resource/7hny-ves3.json', function(data) {
        $.each(data, function(index, value) {
