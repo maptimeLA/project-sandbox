@@ -29,7 +29,7 @@
 
     //Styles and loads the LA City Boundary
     $.getJSON(lacity, function(data) {
-      var hubsLayer = L.geoJson(data, {
+      var lacityLayer = L.geoJson(data, {
         style:{
           fillColor:"aqua",
           color: "#000",
@@ -42,7 +42,7 @@
 
     //Styles and loads the Council Districts
     $.getJSON(lacitycd, function(data) {
-      var routesLayer = L.geoJson(data, {
+      var councilDistrictsLayer = L.geoJson(data, {
         style:{
           fillColor:"#ff78b4",
           color: "#FFF",
@@ -57,9 +57,9 @@
 
     //Styles and loads LA City Parcels
     $.getJSON(lacityparcels, function(data) {
-      var routesLayer = L.geoJson(data, {
+      var parcelLayer = L.geoJson(data, {
         style:{
-          fillColor:"green",    
+          fillColor:"green",
           color: "#FFF",
           weight: 1,
           fillOpacity: 0.8
