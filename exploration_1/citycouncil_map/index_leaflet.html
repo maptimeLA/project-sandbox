@@ -77,7 +77,7 @@
             var district = feature.properties.District;
             var districtName = (districtNames[district] || "Unknown");
             if (councilParcelLayers[districtName] == undefined ) {
-              var layerGroup  = L.layerGroup([]).addLayer(layer);
+              var layerGroup  = L.featureGroup([]).addLayer(layer);
               councilParcelLayers[districtName] = layerGroup;
             } else {
               councilParcelLayers[districtName].addLayer(layer);
@@ -87,6 +87,10 @@
         }).addTo(map);
         councilParcelLayers["All"] = parcelLayer;
         L.control.layers(councilParcelLayers).addTo(map);
+
+        map.on('baselayerchange', function(event) {
+          map.fitBounds(event.layer.getBounds());
+        });
       });
   </script>
 </body>
