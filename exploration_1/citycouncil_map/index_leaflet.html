@@ -25,7 +25,7 @@
     //Create locations for geojson
     var lacity="data/lacity_boundary.geojson";
     var lacitycd="data/lacity_council.geojson";
-    var lacityparcels="data/lacity_parcels.geojson";
+    var lacityparcels="data/council_district_parcels.geojson";
 
     //Styles and loads the LA City Boundary
     $.getJSON(lacity, function(data) {
@@ -40,6 +40,9 @@
       }).addTo(map);
     });
 
+    //We'll build up from the districts GeoJSON
+    var districtNames = { null: "None" }
+
     //Styles and loads the Council Districts
     $.getJSON(lacitycd, function(data) {
       var councilDistrictsLayer = L.geoJson(data, {
@@ -50,7 +53,9 @@
           fillOpacity: 0.8
         },
         onEachFeature: function (feature, layer) {
-          layer.bindPopup("Council District: " + feature.properties.Dist_Name);
+          var districtName = feature.properties.Dist_Name
+          districtNames[feature.properties.District] = districtName;
+          layer.bindPopup("Council District: " + districtName);
         }
       }).addTo(map);
     });
@@ -64,6 +69,11 @@
           weight: 1,
           fillOpacity: 0.8
         },
+        onEachFeature: function (feature, layer) {
+          var district = feature.properties.District;
+          var districtName = (districtNames[district] || "Unknown");
+          layer.bindPopup("Council District: " + districtName);
+        }
       }).addTo(map);
     });
 	</script>
