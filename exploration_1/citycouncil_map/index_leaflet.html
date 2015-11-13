@@ -50,7 +50,7 @@
           fillOpacity: 0.8
         },
         onEachFeature: function (feature, layer) {
-          layer.bindPopup(feature.properties.Dist_Name);
+          layer.bindPopup("Council District: " + feature.properties.Dist_Name);
         }
       }).addTo(map);
     });
