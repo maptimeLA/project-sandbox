@@ -73,7 +73,7 @@
           onEachFeature: function (feature, layer) {
             var district = feature.properties.District;
             var districtName = (districtNames[district] || "Unknown");
-            layer.bindPopup("Council District: " + districtName);
+            layer.bindPopup("AIN: " + feature.properties.AssessorID);
 
             if (councilParcelLayers[districtName] == undefined ) {
               var layerGroup  = L.layerGroup([]).addLayer(layer);
