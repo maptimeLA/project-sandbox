@@ -17,6 +17,9 @@ The outcomes and lessons learned from this unusual collaboration will be shared 
 - **Workshops**: Hold a series of workshops with Maptime
 - **Retrospective Lessons**: share our lessons with likeminded people
 
+## Exploration Maps
+*  [LA City owned Parcels near a Business Improvement District]()
+
 ## do you want to contribute?
 
 See something you want to edit? Want to add a file -- a link to a dataset, a dataset itself, an image of a map, an HTML map file, or more text files? Here's how to do it:
