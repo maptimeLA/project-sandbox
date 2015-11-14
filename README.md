@@ -18,7 +18,9 @@ The outcomes and lessons learned from this unusual collaboration will be shared 
 - **Retrospective Lessons**: share our lessons with likeminded people
 
 ## Exploration Maps
-*  [LA City owned Parcels near a Business Improvement District]()
+*  [LA City owned Parcels near a Business Improvement District](http://maptimela.github.io/project-sandbox/exploration_1/bidmap/index_leaflet.html)
+*  [LA City owned Parcels within a City Council District](http://maptimela.github.io/project-sandbox/exploration_1/citycouncil_map/index_leaflet.html)
+*  [LA City owned Parcels near a transit station / park or school](http://maptimela.github.io/project-sandbox/exploration_1/public_map/index_leaflet.html)
 
 ## do you want to contribute?
 
