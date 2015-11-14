@@ -1,86 +1,119 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Map of Los Angeles City Council Districts</title>
-	<meta charset="utf-8" />
-	<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+  <head>
+    <title>Map of Los Angeles City Council Districts</title>
+    <meta charset="utf-8" />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
     <script src="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
     <link rel="stylesheet" type="text/css" href="css/style.css" />
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 
-</head>
-<body>
+  </head>
+  <body>
     <div id="info"><h1>Map of Los Angeles City Council Districts</h1></div>
-	<div id="map"></div>
+    <div id="map"></div>
 
-	<script>
-         var map = L.map('map')
-        .setView([34.052234,-118.243685], 11);
-        
+    <script>
+      var map = L.map('map')
+      .setView([34.052234,-118.243685], 11);
 
-        //Code to add Basemaps
-        var stamentiles = L.tileLayer('http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png').addTo(map);
-   
-        //Create locations for geojson
-        var lacity="data/lacity_boundary.geojson";
-        var lacitycd="data/lacity_council.geojson";
-        var lacityparcels="data/lacity_parcels.geojson";
-        
-        //Styles and loads the LA City Boundary
-        $.getJSON(lacity, function(data) {
-        var hubsLayer = L.geoJson(data, {
-                style:{
-                fillColor:"aqua",
-                color: "#000",
-                weight: 0,
-                opacity: 0,
-                fillOpacity: 0.2
-                }
+      //Code to add Basemaps
+      var stamentiles = L.tileLayer('http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png').addTo(map);
+
+      //Create locations for geojson
+      var lacity="data/lacity_boundary.geojson";
+      var lacitycd="data/lacity_council.geojson";
+      var lacityparcels="data/council_district_parcels.geojson";
+
+      //Styles and loads the LA City Boundary
+      $.getJSON(lacity, function(data) {
+        var lacityLayer = L.geoJson(data, {
+          style:{
+            fillColor:"aqua",
+            color: "#000",
+            weight: 0,
+            opacity: 0,
+            fillOpacity: 0.2
+          }
         }).addTo(map);
-        });
-        
-        //Styles and loads the Business Improvement Districts
-        $.getJSON(lacitycd, function(data) {
-        var routesLayer = L.geoJson(data, {
-                style:{
-                fillColor:"#ff78b4",    
-                color: "#FFF",
-                weight: 1,
-                fillOpacity: 0.8
-                },
-        onEachFeature: function (feature, layer) {
-        layer.bindPopup(feature.properties.Dist_Name);
-        }
+      });
+
+      //We'll build up from the districts GeoJSON
+      var districtNames = { null: "No Council District" }
+
+      //Styles and loads the Council Districts
+      $.getJSON(lacitycd, function(data) {
+        var councilDistrictsLayer = L.geoJson(data, {
+          style:{
+            fillColor:"#ff78b4",
+            color: "#FFF",
+            weight: 1,
+            fillOpacity: 0.8
+          },
+          onEachFeature: function (feature, layer) {
+            var districtName = feature.properties.Dist_Name
+            districtNames[feature.properties.District] = districtName;
+            layer.bindPopup("Council District: " + districtName);
+          }
         }).addTo(map);
+      });
+
+      var councilParcelLayers = {};
+
+      //Styles and loads LA City Parcels
+      var activeLayer = false; // Did we link to particular layer?
+      $.getJSON(lacityparcels, function(data) {
+
+        $.each(districtNames, function(district, districtName) {
+          councilParcelLayers[districtName] = L.featureGroup([]);
+          console.log('district layer added', district);
         });
-        
-        //Styles and loads LA City Parcels
-        $.getJSON(lacityparcels, function(data) {
-        var routesLayer = L.geoJson(data, {
-                style:{
-                fillColor:"green",    
-                color: "#FFF",
-                weight: 1,
-                fillOpacity: 0.8
-                },
-        }).addTo(map);
-        });
-        
-        //This pulls data from the data portal API, this link brings in about 200 businesses, you can filter more on the data portal and get it's API to load on this map
-       var businesslocations = $.getJSON('https://data.lacity.org/resource/7hny-ves3.json', function(data) {
-       $.each(data, function(index, value) {
-        if (value.location_1!=null){
-        L.circle([value.location_1.latitude,value.location_1.longitude],50,
-            {
-            color: '#5a8bc8',
-            weight:0.0,
-            fillColor: '#5a8bc8',
-            fillOpacity: 1,
+
+        var parcelLayer = L.geoJson(data, {
+          style:{
+            fillColor:"tomato",
+            color: "#FFF",
+            weight: 1,
+            fillOpacity: 0.8
+          },
+          onEachFeature: function (feature, layer) {
+            layer.bindPopup("AIN: " + feature.properties.AssessorID);
+
+            //Group the parcels into district Layers
+            var district = feature.properties.District;
+            var districtName = (districtNames[district] || "Unknown");
+            var featureGroup = councilParcelLayers[districtName]
+            featureGroup.addLayer(layer);
+            if(location.hash.length > 1 && location.hash.slice(1) == districtName) {
+              activeLayer = featureGroup;
             }
-       ).addTo(map).bindPopup(value.business_name);
- }});
-});
-	</script>
+          }
+        })
+
+        //Use the default layer (all parcels) if we didn't link to a specific one
+        if(activeLayer) {
+          activeLayer.addTo(map);
+          map.fitBounds(activeLayer.getBounds());
+        } else {
+          parcelLayer.addTo(map);
+        }
+
+        councilParcelLayers["All"] = parcelLayer;
+        L.control.layers(councilParcelLayers).addTo(map);
+
+        map.on('baselayerchange', function(event) {
+          map.fitBounds(event.layer.getBounds());
+          var layerName = event.name;
+
+          if(history.pushState) {
+            history.pushState(null, null, '#'+layerName);
+          }
+          else {
+            location.hash = '#'+layerName;
+          }
+        });
+      });
+  </script>
 </body>
 </html>
