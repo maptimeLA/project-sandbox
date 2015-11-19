@@ -13,6 +13,10 @@
 #   filter.
 
 import json
+import os
+
+# where data is stored relative to this script
+DATA_DIR = os.path.join(os.path.dirname(__file__), '..', '..')
 
 def get_city_parcels_geojson(agencies, county_parcels_geojson):
     '''print out only the parcels owned by the city agencies'''
@@ -44,15 +48,23 @@ def get_city_agencies(path):
         return agencies
 
 if __name__ == '__main__':
-    city_agencies = get_city_agencies('data/city/city_agencies.txt')
+
+    # Where does the city agency file live?
+    city_agency_path = os.path.join(DATA_DIR, 'city/city_agencies.txt')
+    city_agencies = get_city_agencies(city_agency_path)
     print("{} city agencies".format( len(city_agencies) ))
 
-    county_parcels_geojson = get_county_parcels_geojson('data/lacounty/gis website/public_parcels.geojson')
+    # Where does the county parcel file live?
+    county_parcel_path = os.path.join(DATA_DIR, 'lacounty/gis website/public_parcels.geojson')
+    county_parcels_geojson = get_county_parcels_geojson(county_parcel_path)
     print("{} county parcels".format( len(county_parcels_geojson["features"]) ))
+
 
     city_parcels_geojson = get_city_parcels_geojson(city_agencies, county_parcels_geojson)
     print("{} city parcels".format( len(city_parcels_geojson["features"]) ))
 
-    with open('data/processing/lacity_parcels.geojson', 'w') as outfile:
+    # Where should we write the city parcels file?
+    city_parcel_path = os.path.join(DATA_DIR, 'processing/lacity_parcels.geojson')
+    with open(city_parcel_path, 'w') as outfile:
         json.dump(city_parcels_geojson, outfile)
 
