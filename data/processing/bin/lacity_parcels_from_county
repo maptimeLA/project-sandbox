@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 #
-# Get all the parcels owned by city agencies.
-# e.g.
-#    city_parcels_from_county --agencies=data/city_agencies.txt --county_parcels=lacounty/gis_websit/public_parcels.geojson
+# Get all the parcels from the county owned by city agencies.
 #
 # Input:
 #
