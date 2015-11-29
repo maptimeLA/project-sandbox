@@ -34,6 +34,73 @@ See something you want to edit? Want to add a file -- a link to a dataset, a dat
 6. Click the second option that reads: `Create a new branch for this commit and start a pull request.`
 7. Click the `Propose file change` button.
 
+## names of LA City public agencies that are listed as owning land per county assessor ##
+Below is a list of 55 names and variations of public agencies within the City of Los Angeles that appear as owners of City-owned land. 
+
+This applies to the following files with their corresponding fields. All data pulled from the <a href="https://data.lacounty.gov/browse?category=Property%2FPlanning&utf8=%E2%9C%93"> County Assessor open data portal</a>
+
+- <a href="https://github.com/maptimeLA/project-sandbox/tree/master/data/lacounty"> data portal/Assessor folder </a> : <a href ="https://github.com/maptimeLA/project-sandbox/blob/master/data/lacounty/data%20portal/Assessor/Assessor_-_Publicly_Owned_Parcels_Listing.csv"> Assessor_-_Publicly_Owned_Parcels_Listing.csv.</a> 
+
+- All 15 files corresponding to 15 City Council Disricts inside of <a href= "https://github.com/maptimeLA/project-sandbox/tree/master/city_data/county"> project-sandbox/city_data/county</a>
+
+It is a total of 55 names. 
+- LOS ANGELES CITY DEPARTMENT OF
+- CITY OF LOS ANGELES
+- COMMUNITY REDELOPMENT AGENCY OF
+- COMMUNITY REDEVEDOPMENT AGENCY
+- COMMUNITY REDEVELOPMENT
+- COMMUNITY REDEVELOPMENT AGENCY
+- CRA LA
+- CRA LOS ANGELES
+- DEPARTMENT OF RECREATION AND
+- HOUSING AUTHORITY OF LOS ANGELES
+- HOUSING AUTHORITY OF THE CITY
+- L  A  CITY AIRPORTS
+- L A  CITY
+- L A  CITY AIRPORT
+- L A  CITY AIRPORTS
+- L A CITY
+- L A CITY  AIRPORT
+- L A CITY  AIRPORTS
+- L A CITY  S BY S
+- L A CITY AIRPORT
+- L A CITY AIRPORTS
+- L A CITY DEPARTMENT OF PUBLIC
+- L A CITY DEPARTMENT OF WATER
+- L A CITY DEPT OF  PARKS AND
+- L A CITY DEPT OF RECREATION AND
+- L A CITY DEPT OF TRANSPORTATION
+- L A CITY DEPT OF WATER
+- L A CITY DEPT OF WATER & POWER
+- L A CITY DEPT OF WATER AND
+- L A CITY DEPT OF WATER AND POWER
+- L A CITY DEPT OFWATER AND POWER
+- L A CITY FIRE DEPT
+- L A CITY HARBOR DEPT
+- L A CITY HARBOR DEPT (S BY S)
+- L A CITY HARBOR DEPT S BY S
+- L A CITY HOUSING AUTHORITY
+- L A CITY LAHD
+- L A CITY LIBRARY
+- L A CITY PARK
+- L A CITY PARK S BY S
+- L A CITY PARKING AUTHORITY
+- L A CITY PARKS
+- L A CITY PLAYGROUND
+- L A CITY POLICE DEPT
+- L A CITY RECREATION AND PARKS
+- L A CITY S BY S
+- L A CITY(S BY S)
+- LA CITY
+- LA CITY AIRPORT
+- LOS ANGELES CITY
+- LOS ANGELES CITY AND
+- LOS ANGELES CITY HOUSING
+- LOS ANGELES MEMORIAL COLISUEM
+- PORT OF LOS ANGELES
+- REDEVELOPMENT AGENCY OF L A CITY
+- REDEVELOPMENT AGENCY OF LA CITY 
+
 ## important terms and definitions:
 
 - `Open Source`: Code, data, files, programs that are free of charge to the public to use, copy, read and participate in the making of.
