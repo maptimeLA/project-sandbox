@@ -1,0 +1,70 @@
+#!/usr/bin/env python
+#
+# Get all the parcels from the county owned by city agencies.
+#
+# Input:
+#
+# city agencies
+#   Name of city agencies, one per line
+#
+# county parcel data
+#   Geojson file of parcels, e.g. what you would download from the county GIS
+#   portal. Critically, it should have a field 'AgencyName' which we'll use to
+#   filter.
+
+import json
+import os
+
+# where data is stored relative to this script
+DATA_DIR = os.path.join(os.path.dirname(__file__), '..', '..')
+
+def get_city_parcels_geojson(agencies, county_parcels_geojson):
+    '''print out only the parcels owned by the city agencies'''
+    county_parcels = county_parcels_geojson['features']
+    city_parcels_geojson = {
+        'crs': county_parcels_geojson['crs'],
+        'type': county_parcels_geojson['type'],
+        'features': []
+    }
+
+    for parcel in county_parcels:
+        if parcel['properties']['AgencyName'] in agencies:
+            city_parcels_geojson['features'].append(parcel)
+
+    return city_parcels_geojson
+
+def get_county_parcels_geojson(path):
+    '''load the county parcels into a geojson dict'''
+    with open(path) as parcel_file:
+        # we must specify the encoding of our json file because
+        # the file in our repo is 'Latin 1' encoding (aka ISO-8859-1)
+        # but json.load by default expects utf-8
+        return json.load(parcel_file, encoding='ISO-8859-1')
+
+def get_city_agencies(path):
+    '''load the city agencies into a list'''
+    with open(path) as agency_file:
+        agencies = [line.strip() for line in agency_file.readlines()]
+        return agencies
+
+if __name__ == '__main__':
+
+    # Where does the city agency file live?
+    city_agency_path = os.path.join(DATA_DIR, 'city/city_agencies.txt')
+    city_agencies = get_city_agencies(city_agency_path)
+    print("{} city agencies".format( len(city_agencies) ))
+
+    # Where does the county parcel file live?
+    county_parcel_path = os.path.join(DATA_DIR, 'lacounty/gis website/public_parcels.geojson')
+    county_parcels_geojson = get_county_parcels_geojson(county_parcel_path)
+    print("{} county parcels".format( len(county_parcels_geojson["features"]) ))
+
+
+    city_parcels_geojson = get_city_parcels_geojson(city_agencies, county_parcels_geojson)
+    print("{} city parcels".format( len(city_parcels_geojson["features"]) ))
+
+    # Where should we write the city parcels file?
+    city_parcel_path = os.path.join(DATA_DIR, 'processing/lacity_parcels.geojson')
+    with open(city_parcel_path, 'w') as outfile:
+        json.dump(city_parcels_geojson, outfile)
+
